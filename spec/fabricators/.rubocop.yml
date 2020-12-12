@@ -1,0 +1,5 @@
+
+# spec/fabricators/.rubocop.yml
+
+inherit_from:
+  - ../../.rubocop.yml
