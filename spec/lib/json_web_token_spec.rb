@@ -12,10 +12,8 @@ RSpec.describe JsonWebToken do
 
   describe "#decode" do
     it "decodes a valid token" do
-      # rubocop:disable Layout/LineLength
-      data = described_class.decode(token: "eyJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiTW9oYW1lZCIsImV4cCI6MTYwNzk4OTc5Mn0.gpo2kWxBsmatGOElQ6PHBxhwUlcFfLAOIcAzD3RYy_s")
-      # rubocop:enable Layout/LineLength
-
+      token = described_class.encode(payload: { name: "Mohamed" })
+      data = described_class.decode(token: token)
       expect(data[:name]).to eq("Mohamed")
     end
 
