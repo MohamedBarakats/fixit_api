@@ -33,7 +33,7 @@ Layout/IndentationConsistency:
   EnforcedStyle: 'indented_internal_methods'
 
 Layout/LineLength:
-  Max: 100
+  Max: 120
   Exclude:
     - 'db/*'
     - 'config/initializers/*.rb'
