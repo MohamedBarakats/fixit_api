@@ -11,39 +11,44 @@ RSpec.describe "Users API", type: :request do
   end
   let(:invalid_attributes) do
     {
-      name: nil,
+      first_name: nil,
+      last_name: nil,
       email: nil,
       password: nil,
       password_confirmation: nil
     }
   end
 
-  describe "POST /signup" do
+  describe "POST /api/v1/signup" do
     context "when valid request" do
-      before { post "/signup", params: { user: valid_attributes }.to_json, headers: headers }
+      before { post "/api/v1/signup", params: { user: valid_attributes }.to_json, headers: headers }
 
       it "creates a new user" do
         expect(response).to have_http_status(201)
       end
 
       it "returns success message" do
-        expect(json["message"]).to match(/Account created successfully/)
+        expect(json[:message]).to match(/Account created successfully/)
       end
 
       it "returns an authentication token" do
-        expect(json["auth_token"]).not_to be_nil
+        expect(json[:auth_token]).not_to be_nil
+      end
+
+      it "returns the user data" do
+        expect(json[:user][:data][:attributes][:last_name]).to eq(valid_attributes[:last_name])
       end
     end
 
     context "when invalid params" do
-      before { post "/signup", params: { user: invalid_attributes }.to_json, headers: headers }
+      before { post "/api/v1/signup", params: { user: invalid_attributes }.to_json, headers: headers }
 
       it "does not create a new user" do
         expect(response).to have_http_status(422)
       end
 
       it "returns failure message" do
-        expect(json["message"])
+        expect(json[:message])
           .to include("Validation failed:")
       end
     end
@@ -51,15 +56,15 @@ RSpec.describe "Users API", type: :request do
     context "when missing params" do
       it "raises ParameterMissing" do
         expect do
-          post "/signup", params: { user: nil }.to_json,
-                          headers: headers
+          post "/api/v1/signup", params: { user: nil }.to_json,
+                                 headers: headers
         end.to raise_error(ActionController::ParameterMissing,
                            /param is missing or the value is empty: use/)
       end
     end
 
     context "when invalid_headers" do
-      before { post "/signup", params: { user: invalid_attributes }.to_json, headers: invalid_headers_param }
+      before { post "/api/v1/signup", params: { user: invalid_attributes }.to_json, headers: invalid_headers_param }
 
       it "returns 422" do
         expect(response).to have_http_status(422)

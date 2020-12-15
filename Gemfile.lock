@@ -99,6 +99,8 @@ GEM
       rspec (>= 2.99.0, < 4.0)
     i18n (1.8.5)
       concurrent-ruby (~> 1.0)
+    jsonapi-serializer (2.1.0)
+      activesupport (>= 4.2)
     jwt (2.2.2)
     kaminari (1.2.1)
       activesupport (>= 4.1.0)
@@ -262,6 +264,7 @@ DEPENDENCIES
   factory_bot_rails
   faker
   guard-rspec
+  jsonapi-serializer
   jwt
   kaminari
   listen (~> 3.3)
