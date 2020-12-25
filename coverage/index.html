@@ -14,7 +14,7 @@
       <img src="./assets/0.12.3/loading.gif" alt="loading"/>
     </div>
     <div id="wrapper" class="hide">
-      <div class="timestamp">Generated <abbr class="timeago" title="2020-12-25T11:40:25+01:00">2020-12-25T11:40:25+01:00</abbr></div>
+      <div class="timestamp">Generated <abbr class="timeago" title="2020-12-25T16:46:43+01:00">2020-12-25T16:46:43+01:00</abbr></div>
       <ul class="group_tabs"></ul>
 
       <div id="content">
@@ -30,7 +30,7 @@
      covered at
      <span class="covered_strength">
        <span class="green">
-         2.25
+         2.24
        </span>
     </span> hits/line
     )
@@ -43,8 +43,8 @@
   </div>
 
   <div class="t-line-summary">
-    <b>336</b> relevant lines,
-    <span class="green"><b>335</b> lines covered</span> and
+    <b>338</b> relevant lines,
+    <span class="green"><b>337</b> lines covered</span> and
     <span class="red"><b>1</b> lines missed. </span>
     (<span class="green">
   99.7%
@@ -139,11 +139,11 @@
           <tr class="t-file">
             <td class="strong t-file__name"><a href="#9fba6b4691680c2a1438dbca42aa65d02122b8b4" class="src_link" title="app/controllers/concerns/response.rb">app/controllers/concerns/response.rb</a></td>
             <td class="green strong cell--number t-file__coverage">100.00 %</td>
-            <td class="cell--number">8</td>
-            <td class="cell--number">3</td>
-            <td class="cell--number">3</td>
+            <td class="cell--number">12</td>
+            <td class="cell--number">5</td>
+            <td class="cell--number">5</td>
             <td class="cell--number">0</td>
-            <td class="cell--number">5.00</td>
+            <td class="cell--number">3.20</td>
             
           </tr>
         
@@ -1260,7 +1260,7 @@
 
             
 
-            <code class="ruby">        user = User.create(user_params)</code>
+            <code class="ruby">        @user = User.new(user_params)</code>
           </li>
         </div>
       
@@ -1271,7 +1271,7 @@
 
             
 
-            <code class="ruby">        if user.errors.empty?</code>
+            <code class="ruby">        if @user.save</code>
           </li>
         </div>
       
@@ -1282,7 +1282,7 @@
 
             
 
-            <code class="ruby">          auth_token = AuthenticateUser.new(email: user.email, password: user.password).call</code>
+            <code class="ruby">          auth_token = AuthenticateUser.new(email: @user.email, password: @user.password).call</code>
           </li>
         </div>
       
@@ -1304,7 +1304,7 @@
 
             
 
-            <code class="ruby">                       user: user_serialized_object(user: user) }</code>
+            <code class="ruby">                       user: user_serialized_object(user: @user) }</code>
           </li>
         </div>
       
@@ -1337,7 +1337,7 @@
 
             
 
-            <code class="ruby">          json_response(response: { errors: user.errors.full_messages }, status: :unprocessable_entity)</code>
+            <code class="ruby">          render_errors(errors: @user.errors.full_messages, status: :unprocessable_entity)</code>
           </li>
         </div>
       
@@ -2222,7 +2222,7 @@
 
             
 
-            <code class="ruby">      json_response(response: { message: error.message }, status: :not_found)</code>
+            <code class="ruby">      render_errors(errors: { message: error.message }, status: :not_found)</code>
           </li>
         </div>
       
@@ -2310,7 +2310,7 @@
 
             
 
-            <code class="ruby">      json_response(response: { message: error.message }, status: :unauthorized)</code>
+            <code class="ruby">      render_errors(errors: { message: error.message }, status: :unauthorized)</code>
           </li>
         </div>
       
@@ -2355,8 +2355,8 @@
     
 
     <div class="t-line-summary">
-      <b>3</b> relevant lines.
-      <span class="green"><b>3</b> lines covered</span> and
+      <b>5</b> relevant lines.
+      <span class="green"><b>5</b> lines covered</span> and
       <span class="red"><b>0</b> lines missed.</span>
     </div>
 
@@ -2423,8 +2423,8 @@
         </div>
       
         <div>
-          <li class="covered" data-hits="13" data-linenumber="6">
-            <span class="hits">13</span>
+          <li class="covered" data-hits="5" data-linenumber="6">
+            <span class="hits">5</span>
             
 
             
@@ -2446,6 +2446,50 @@
       
         <div>
           <li class="never" data-hits="" data-linenumber="8">
+            
+            
+
+            
+
+            <code class="ruby"></code>
+          </li>
+        </div>
+      
+        <div>
+          <li class="covered" data-hits="1" data-linenumber="9">
+            <span class="hits">1</span>
+            
+
+            
+
+            <code class="ruby">  def render_errors(errors:, status: :unprocessable_entity)</code>
+          </li>
+        </div>
+      
+        <div>
+          <li class="covered" data-hits="8" data-linenumber="10">
+            <span class="hits">8</span>
+            
+
+            
+
+            <code class="ruby">    render json: { errors: errors }, status: status</code>
+          </li>
+        </div>
+      
+        <div>
+          <li class="never" data-hits="" data-linenumber="11">
+            
+            
+
+            
+
+            <code class="ruby">  end</code>
+          </li>
+        </div>
+      
+        <div>
+          <li class="never" data-hits="" data-linenumber="12">
             
             
 
@@ -8772,7 +8816,7 @@
 
             
 
-            <code class="ruby">        expect(json[:message]).to match(/Invalid credentials/)</code>
+            <code class="ruby">        expect(json[:errors][:message]).to match(/Invalid credentials/)</code>
           </li>
         </div>
       

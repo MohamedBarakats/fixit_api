@@ -5,4 +5,8 @@ module Response
   def json_response(response:, status: :ok)
     render json: response, status: status
   end
+
+  def render_errors(errors:, status: :unprocessable_entity)
+    render json: { errors: errors }, status: status
+  end
 end

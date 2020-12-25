@@ -15,7 +15,7 @@ module ExceptionHandler
     rescue_from ExceptionHandler::InvalidToken, with: :four_twenty_two
 
     rescue_from ActiveRecord::RecordNotFound do |error|
-      json_response(response: { message: error.message }, status: :not_found)
+      render_errors(errors: { message: error.message }, status: :not_found)
     end
   end
 
@@ -23,6 +23,6 @@ module ExceptionHandler
 
     # JSON response with message; Status code 401 - Unauthorized
     def unauthorized_request(error)
-      json_response(response: { message: error.message }, status: :unauthorized)
+      render_errors(errors: { message: error.message }, status: :unauthorized)
     end
 end
