@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe "Users API", type: :request do
+RSpec.describe "UsersController", type: :request do
   let(:user) { build(:user) }
   let(:headers) { valid_headers.except("Authorization") }
   let(:invalid_headers_param) { invalid_headers }
@@ -48,8 +48,42 @@ RSpec.describe "Users API", type: :request do
       end
 
       it "returns failure message" do
-        expect(json[:message])
-          .to include("Validation failed:")
+        expect(json[:errors])
+          .to eq(["Password can't be blank",
+                  "First name can't be blank",
+                  "Last name can't be blank",
+                  "Email can't be blank",
+                  "Password digest can't be blank",
+                  "Email is invalid",
+                  "Password can't be blank",
+                  "Password is too short (minimum is 8 characters)"])
+      end
+    end
+
+    context "when user exists" do
+      let(:user) { create(:user) }
+      before { post "/api/v1/signup", params: { user: valid_attributes }.to_json, headers: headers }
+
+      it "does not create a new user" do
+        expect(response).to have_http_status(422)
+      end
+
+      it "returns failure message for Email has already been taken" do
+        expect(json[:errors])
+          .to include("Email has already been taken")
+      end
+    end
+
+    context "when email is not valid" do
+      before { post "/api/v1/signup", params: { user: { email: "Mohamed" } }.to_json, headers: headers }
+
+      it "does not create a new user" do
+        expect(response).to have_http_status(422)
+      end
+
+      it "returns failure message for Email has already been taken" do
+        expect(json[:errors])
+          .to include("Email is invalid")
       end
     end
 

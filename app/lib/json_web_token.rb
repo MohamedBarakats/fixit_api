@@ -4,7 +4,7 @@ class JsonWebToken
   HMAC_SECRET = Rails.application.secrets.secret_key_base
   HS256_ALGORITHM = 'HS256'
 
-  def self.encode(payload:, exp: 24.hours.from_now)
+  def self.encode(payload:, exp: 7.days.from_now)
     payload[:exp] = exp.to_i
     JWT.encode(payload, HMAC_SECRET, HS256_ALGORITHM)
   end
