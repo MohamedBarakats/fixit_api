@@ -7,7 +7,7 @@ RSpec.describe "UsersController", type: :request do
   let(:headers) { valid_headers.except("Authorization") }
   let(:invalid_headers_param) { invalid_headers }
   let(:valid_attributes) do
-    attributes_for(:user, password_confirmation: user.password)
+    attributes_for(:user, password_confirmation: user.password, mobile_number: "+49015205290170")
   end
   let(:invalid_attributes) do
     {
@@ -15,7 +15,8 @@ RSpec.describe "UsersController", type: :request do
       last_name: nil,
       email: nil,
       password: nil,
-      password_confirmation: nil
+      password_confirmation: nil,
+      gender: nil
     }
   end
 
@@ -48,15 +49,16 @@ RSpec.describe "UsersController", type: :request do
       end
 
       it "returns failure message" do
-        expect(json[:errors])
-          .to eq(["Password can't be blank",
-                  "First name can't be blank",
-                  "Last name can't be blank",
-                  "Email can't be blank",
-                  "Password digest can't be blank",
-                  "Email is invalid",
-                  "Password can't be blank",
-                  "Password is too short (minimum is 8 characters)"])
+        expected_errors = ["Password can't be blank",
+                           "First name can't be blank",
+                           "Last name can't be blank",
+                           "Email can't be blank",
+                           "Password digest can't be blank",
+                           "Gender can't be blank",
+                           "Email is invalid",
+                           "Password can't be blank",
+                           "Password is too short (minimum is 8 characters)"]
+        expect(json[:errors]).to include(expected_errors.sample)
       end
     end
 
