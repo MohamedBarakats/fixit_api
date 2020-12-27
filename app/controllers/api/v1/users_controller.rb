@@ -5,22 +5,15 @@ module Api
     class UsersController < ApplicationController
       skip_before_action :authorize_request, only: :create
       def create
-        @user = User.new(user_params)
-        if @user.save
-          auth_token = AuthenticateUser.new(email: @user.email, password: @user.password).call
-          response = { message: JsonWebTokenMessages.account_created, auth_token: auth_token,
-                       user: user_serialized_object(user: @user) }
-          json_response(response: response, status: :created)
+        user_object, errors = UserService.new(user_params: user_params).create
+        if errors.empty?
+          json_response(response: user_object, status: :created)
         else
-          render_errors(errors: @user.errors.full_messages, status: :unprocessable_entity)
+          render_errors(errors: errors, status: :unprocessable_entity)
         end
       end
 
       private
-
-        def user_serialized_object(user:)
-          UserSerializer.new(user).serializable_hash
-        end
 
         def user_params
           params.require(:user).permit(
@@ -28,7 +21,9 @@ module Api
             :last_name,
             :email,
             :password,
-            :password_confirmation
+            :password_confirmation,
+            :gender,
+            :mobile_number
           )
         end
     end
