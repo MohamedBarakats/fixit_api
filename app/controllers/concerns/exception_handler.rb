@@ -25,4 +25,8 @@ module ExceptionHandler
     def unauthorized_request(error)
       render_errors(errors: { message: error.message }, status: :unauthorized)
     end
+
+    def four_twenty_two(error)
+      render_errors(errors: { message: error.message }, status: :unprocessable_entity)
+    end
 end

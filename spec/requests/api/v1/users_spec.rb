@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe "UsersController", type: :request do
+RSpec.describe "/api/v1/users", type: :request do
   let(:user) { build(:user) }
   let(:headers) { valid_headers.except("Authorization") }
   let(:invalid_headers_param) { invalid_headers }
