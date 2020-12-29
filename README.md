@@ -9,7 +9,7 @@ The setups steps expect following tools installed on the system.
 ##### 1. Check out the repository
 
 ```bash
-git clone git@github.com:MohamedBarakats/fixit-users-service.git
+git clone git@github.com:MohamedBarakats/fixit_api.git
 ```
 
 ##### 2. Create database.yml file
