@@ -2,16 +2,10 @@
 
 class PhoneNumberService
   include Response
-  attr_reader :phone_number_params
-
-  def initialize(number:, user_id: nil)
-    @phone_number_params = { number: number, user_id: user_id }
-  end
-
-  def create
+  def create(phone_number_params:)
     @errors = []
-    phone_number = PhoneNumber.find_or_create_by(phone_number_params)
     response = {}
+    phone_number = PhoneNumber.find_or_create_by(phone_number_params)
     @errors += phone_number.errors.full_messages
     if @errors.empty?
       response = {

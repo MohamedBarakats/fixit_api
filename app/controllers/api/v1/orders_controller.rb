@@ -18,7 +18,7 @@ module Api
 
       # POST /orders
       def create
-        order_object, errors = OrderService.new(order: order_params, user_id: current_user.id).create
+        order_object, errors = OrderService.new.create(order_params: order_params.merge!({ user_id: current_user.id }))
         if errors.empty?
           json_response(response: order_object, status: :created)
         else
@@ -28,10 +28,11 @@ module Api
 
       # PATCH/PUT /orders/1
       def update
-        if @order.update(order_params)
-          json_response(response: { order: order_serialized_object(order: @order) }, status: :ok)
+        order_object, errors = OrderService.new.update(order: @order, order_params: order_params)
+        if errors.empty?
+          json_response(response: order_object, status: :ok)
         else
-          render_errors(errors: @order.errors.full_messages, status: :unprocessable_entity)
+          render_errors(errors: errors, status: :unprocessable_entity)
         end
       end
 
