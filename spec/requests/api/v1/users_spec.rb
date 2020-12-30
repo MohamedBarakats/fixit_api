@@ -3,7 +3,7 @@
 require "rails_helper"
 
 RSpec.describe "/api/v1/users", type: :request do
-  let(:user) { build(:user) }
+  let(:user) { create(:user) }
   let(:headers) { valid_headers.except("Authorization") }
   let(:invalid_headers_param) { invalid_headers }
   let(:valid_attributes) do
@@ -63,8 +63,10 @@ RSpec.describe "/api/v1/users", type: :request do
     end
 
     context "when user exists" do
-      let(:user) { create(:user) }
-      before { post "/api/v1/signup", params: { user: valid_attributes }.to_json, headers: headers }
+      before do
+        post "/api/v1/signup", params: { user: valid_attributes.merge!({ email: user.email }) }.to_json,
+                               headers: headers
+      end
 
       it "does not create a new user" do
         expect(response).to have_http_status(422)

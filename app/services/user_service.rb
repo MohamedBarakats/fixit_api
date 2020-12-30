@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 class UserService
+  include Response
   attr_reader :user_params
 
   def initialize(user_params:)
@@ -34,7 +35,7 @@ class UserService
     end
 
     def user_serialized_object(user:)
-      UserSerializer.new(user, include: [:phone_numbers]).serializable_hash
+      generic_serialized_object(object: user, serializer: 'UserSerializer', includes: [:phone_numbers])
     end
 
     def create_associations(user_id:)

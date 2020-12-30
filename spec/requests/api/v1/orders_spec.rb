@@ -43,8 +43,8 @@ RSpec.describe "/api/v1/orders", type: :request do
   end
 
   describe "GET /index" do
+    let(:order) { create(:order) }
     it "renders a successful response" do
-      Order.create! valid_attributes
       get api_v1_orders_url, headers: valid_headers, as: :json
       expect(response).to be_successful
     end
@@ -52,8 +52,9 @@ RSpec.describe "/api/v1/orders", type: :request do
 
   describe "GET /show" do
     context "When order exists" do
+      let(:order) { create(:order) }
+
       it "renders a successful response" do
-        order = Order.create! valid_attributes
         get api_v1_order_url(order), headers: valid_headers, as: :json
         expect(response).to be_successful
         serialized_object = serialized_object_to_json(object: generic_serialized_object(object: order,
@@ -108,6 +109,7 @@ RSpec.describe "/api/v1/orders", type: :request do
   end
 
   describe "PATCH /update" do
+    let!(:order) { create(:order) }
     context "with valid parameters" do
       let(:new_attributes) do
         {
@@ -116,9 +118,7 @@ RSpec.describe "/api/v1/orders", type: :request do
           description: "stopped suddenly"
         }
       end
-
       it "updates the requested order" do
-        order = Order.create! valid_attributes
         patch api_v1_order_url(order),
               params: { order: new_attributes }, headers: valid_headers, as: :json
         order.reload
@@ -126,7 +126,6 @@ RSpec.describe "/api/v1/orders", type: :request do
       end
 
       it "renders a JSON response with the order" do
-        order = Order.create! valid_attributes
         patch api_v1_order_url(order),
               params: { order: new_attributes }, headers: valid_headers, as: :json
         expect(response).to have_http_status(:ok)
@@ -140,7 +139,6 @@ RSpec.describe "/api/v1/orders", type: :request do
 
     context "with invalid parameters" do
       it "renders a JSON response with errors for the order" do
-        order = Order.create! valid_attributes
         patch api_v1_order_url(order),
               params: { order: invalid_attributes }, headers: valid_headers, as: :json
         expect(response).to have_http_status(:unprocessable_entity)
@@ -150,8 +148,9 @@ RSpec.describe "/api/v1/orders", type: :request do
   end
 
   describe "DELETE /destroy" do
+    let!(:order) { create(:order) }
+
     it "destroys the requested order" do
-      order = Order.create! valid_attributes
       expect do
         delete api_v1_order_url(order), headers: valid_headers, as: :json
       end.to change(Order, :count).by(-1)

@@ -10,7 +10,7 @@ module Response
     render json: { errors: errors }, status: status
   end
 
-  def generic_serialized_object(object:, serializer:)
-    serializer.constantize.new(object).serializable_hash
+  def generic_serialized_object(object:, serializer:, includes: [])
+    serializer.constantize.new(object, include: includes).serializable_hash
   end
 end

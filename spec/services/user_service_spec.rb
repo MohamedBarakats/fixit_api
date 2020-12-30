@@ -3,7 +3,7 @@
 require "rails_helper"
 
 RSpec.describe UserService, type: :service do
-  let(:user) { build(:user) }
+  let(:user) { create(:user) }
   let(:valid_attributes) do
     attributes_for(:user, password_confirmation: user.password, mobile_number: "+49015205290170")
   end
@@ -42,8 +42,7 @@ RSpec.describe UserService, type: :service do
     end
 
     context "when user exists" do
-      let(:user) { create(:user) }
-      subject { described_class.new(user_params: valid_attributes) }
+      subject { described_class.new(user_params: valid_attributes.merge!({ email: user.email })) }
       it "returns failure message for Email has already been taken" do
         _user_object, errors = subject.create
         expect(errors)

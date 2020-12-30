@@ -18,11 +18,11 @@ module Api
 
       # POST /orders
       def create
-        @order = Order.new(order_params)
-        if @order.save
-          json_response(response: { order: order_serialized_object(order: @order) }, status: :created)
+        order_object, errors = OrderService.new(order: order_params, user_id: current_user.id).create
+        if errors.empty?
+          json_response(response: order_object, status: :created)
         else
-          render_errors(errors: @order.errors.full_messages, status: :unprocessable_entity)
+          render_errors(errors: errors, status: :unprocessable_entity)
         end
       end
 

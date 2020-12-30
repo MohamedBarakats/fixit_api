@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 class PhoneNumberService
+  include Response
   attr_reader :phone_number_params
 
   def initialize(number:, user_id: nil)
@@ -23,6 +24,6 @@ class PhoneNumberService
   private
 
     def phone_number_serialized_object(phone_number:)
-      PhoneNumberSerializer.new(phone_number).serializable_hash
+      generic_serialized_object(object: phone_number, serializer: 'PhoneNumberSerializer')
     end
 end
