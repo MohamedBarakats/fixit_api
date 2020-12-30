@@ -5,7 +5,7 @@ module Api
     class UsersController < ApplicationController
       skip_before_action :authorize_request, only: :create
       def create
-        user_object, errors = UserService.new(user_params: user_params).create
+        user_object, errors = UserService.new.create(user_params: user_params)
         if errors.empty?
           json_response(response: user_object, status: :created)
         else

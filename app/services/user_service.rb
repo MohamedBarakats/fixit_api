@@ -1,17 +1,17 @@
 # frozen_string_literal: true
 
 class UserService
+  include Response
   attr_reader :user_params
 
-  def initialize(user_params:)
-    @user_params = user_params
-  end
+  def create(user_params:)
+    return unless user_params
 
-  def create
+    @user_params = user_params
     @errors = []
     response = {}
     ActiveRecord::Base.transaction do
-      user = create_user(user_params: user_params.except(:mobile_number))
+      user = create_user(user_params: user_params)
       response = user_response(user: user) if @errors.empty?
       raise ActiveRecord::Rollback if @errors.any?
     end
@@ -34,7 +34,7 @@ class UserService
     end
 
     def user_serialized_object(user:)
-      UserSerializer.new(user, include: [:phone_numbers]).serializable_hash
+      generic_serialized_object(object: user, serializer: 'UserSerializer', includes: [:phone_numbers])
     end
 
     def create_associations(user_id:)
@@ -45,7 +45,8 @@ class UserService
     end
 
     def create_phone_number(number:, user_id:)
-      _response, errors = PhoneNumberService.new(number: number, user_id: user_id).create
+      phone_number_params = { number: number, user_id: user_id }
+      _response, errors = PhoneNumberService.new.create(phone_number_params: phone_number_params)
       @errors += errors
     end
 end

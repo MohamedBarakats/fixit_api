@@ -3,6 +3,8 @@
 class User < ApplicationRecord
   has_secure_password
   has_many :phone_numbers, dependent: :destroy
+  has_many :orders, dependent: :destroy
+
   enum gender: {
     male: 'male',
     female: 'female',
